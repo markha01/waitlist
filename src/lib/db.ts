@@ -33,3 +33,25 @@ export async function getWaitlistCount(): Promise<number> {
   );
   return parseInt(result.rows[0].count, 10);
 }
+
+export type WaitlistEntry = {
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+};
+
+export async function getWaitlistEntries(): Promise<WaitlistEntry[]> {
+  const result = await pool.query(
+    "SELECT id, name, email, created_at FROM waitlist_entries ORDER BY created_at ASC"
+  );
+  return result.rows;
+}
+
+export async function removeFromWaitlist(id: number): Promise<boolean> {
+  const result = await pool.query(
+    "DELETE FROM waitlist_entries WHERE id = $1",
+    [id]
+  );
+  return (result.rowCount ?? 0) > 0;
+}

@@ -1,6 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addToWaitlist } from "@/lib/db";
+import { addToWaitlist, getWaitlistEntries } from "@/lib/db";
 import { sendConfirmationEmail } from "@/lib/email";
+
+export async function GET() {
+  try {
+    const entries = await getWaitlistEntries();
+    return NextResponse.json({ entries });
+  } catch (error) {
+    console.error("Waitlist GET error:", error);
+    return NextResponse.json(
+      { message: "Something went wrong." },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
