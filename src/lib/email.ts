@@ -22,12 +22,11 @@ export async function sendConfirmationEmail(
   }
 
   const transporter = createTransporter();
-  const fromName = process.env.SMTP_FROM || "Liivo Hair Salon";
-  const fromAddress = process.env.SMTP_USER;
+  const from = process.env.SMTP_FROM || "Liivo Hair Salon";
   const firstName = name.split(" ")[0];
 
   await transporter.sendMail({
-    from: `"${fromName}" <${fromAddress}>`,
+    from,
     to: email,
     subject: `You're on the Liivo waitlist ✦`,
     html: buildEmailHtml(firstName),
